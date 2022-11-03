@@ -12,3 +12,6 @@ const scoreReducer = (state = initialState, action)=> {
         default: return state
     }
 }
+
+
+export default scoreReducer
