@@ -10,7 +10,7 @@ const Square = () => {
     let timerId
 
     useEffect(()=> {
-        const timerId = setInterval(()=>{
+        timerId = setInterval(()=>{
             setMoleActive(true)
             setTimeout(() => {setMoleActive(false)}, 800)
         }, randomTime)
