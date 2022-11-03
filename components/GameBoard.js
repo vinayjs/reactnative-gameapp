@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import Square from "./Square.js";
+import { connect } from 'react-redux'
 
 
-const GameBoard = () => {
-  const[timeLeft, setTimeLeft] = useState(10)
+const GameBoard = (props) => {
+  const[timeLeft, setTimeLeft] = useState(60)
 
   useEffect(()=>{
     if(!timeLeft) return
@@ -15,9 +16,14 @@ const GameBoard = () => {
   },[timeLeft])
 
     return (
-      <View style= {styles.container}>
-      <Text>Whack-a-mole-App</Text>
-      <Text> {timeLeft} </Text>
+      <ImageBackground 
+      style= {styles.container} 
+      source={require('../assets/background.png')}
+      >
+      <Text style={styles.font}>Whack-A-Mole</Text>
+      <Text> You have {timeLeft} seconds left </Text>
+      <Text></Text>
+      <Text> {props.score} Moles whacked! </Text>
         <View style={styles.game}>
         <Square></Square>
         <Square></Square>
@@ -32,7 +38,7 @@ const GameBoard = () => {
         <Square></Square>
         <Square></Square>
         </View>
-      </View>
+      </ImageBackground>
     )
 
 }
@@ -42,14 +48,25 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
+      fontWeight: 20
     },
     game: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      width: 300
+      width: 300,
+      paddingTop: 20,
+    },
+    font: {
+      fontSize: 40,
+      padding:20,
+      marginTop:10,
+      fontWeight: 'bold'
     }
   });
   
-
-export default GameBoard
+ const mapStateToProps = state => {
+  return {
+    score: state.score
+  }
+ }
+export default connect(mapStateToProps) (GameBoard)

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text  } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
+import { addScore } from "../redux";
+import { connect } from 'react-redux'
 
 
 
-const Square = () => {
+const Square = (props) => {
     const [moleActive, setMoleActive] = useState(false)
     const[isGameOver, setGameOver] = useState(false)
-    const randomTime = Math.round() * 20000
+    const randomTime = Math.random() * 20000
     let timerId
 
     useEffect(()=> {
@@ -14,7 +16,7 @@ const Square = () => {
             setMoleActive(true)
             setTimeout(() => {setMoleActive(false)}, 800)
         }, randomTime)
-        setTimeout(endGame, 10 * 1000)
+        setTimeout(endGame, 60 * 1000)
 
     }, [])
     
@@ -24,9 +26,13 @@ const Square = () => {
     }
 
     return (
-        <View style={moleActive? styles.mole :styles.square}>
-        {isGameOver && <Text>X</Text>}
-        </View>
+
+        <TouchableOpacity onPress={moleActive? props.addScore : null}>
+            <Image 
+                 source={moleActive? require('../assets/mole.png'): require('../assets/hole.png')} 
+                 style={moleActive? styles.mole : styles.square}>
+            </Image>
+        </TouchableOpacity>
 
     )
 
@@ -38,16 +44,35 @@ const styles = StyleSheet.create({
         minWidth: 80,
         minHeight:80,
         margin: 10,
-        backgroundColor: 'red'
+        backgroundColor: '#9BF89C',
+        width: '100%'
     },
     mole :{
         flex: 1,
         minWidth: 80,
         minHeight:80,
         margin: 10,
-        backgroundColor: 'blue'
+        backgroundColor: '#9BF89C', 
+        width: '100%'
+    },
+    x: {
+        fontWeight: 'bold',
+        fontSize: 65,
+        textAlign: 'center',
     }
     
 })
 
-export default Square
+const mapStateToProps = state => {
+    return{
+        score: state.score
+    }
+}
+
+const mapDispactchToProps = dispatch => {
+    return {
+        addScore: () => dispatch(addScore())
+    }
+}
+
+export default connect(mapStateToProps, mapDispactchToProps)(Square)
